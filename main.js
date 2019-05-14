@@ -1,19 +1,7 @@
-const { promisify } = require('util');
-const request = require('request');
+const requestAsync = require('request-promise-native');
 
 const SCREENLY_API = 'https://api.screenlyapp.com';
 const SCREENLY_TOKEN = '';
-const PLAYLIST_TTL = 15000;
-
-/** Map between EVRYTHNG products and Screenly playlist IDs.
- * 
- * TODO: Should this be in the action customFields?
- */
-const SKU_PLAYLIST_MAP = {
-  exampleProductId: ['examplePlaylistId'],
-};
-
-const requestAsync = promisify(request);
 
 /**
  * Check the action has all the required information.
@@ -21,12 +9,17 @@ const requestAsync = promisify(request);
  * @param {object} action - The event action.
  */
 const checkAction = async (action) => {
-  logger.info(`Received action ${action.id}`);
-  if (!action.product) {
-    throw new Error('No product specified in action');
+  if (!action.customFields) {
+    throw new Error('customFields was not present in action');    
   }
 
-  logger.info(`Product ID: ${action.product}`);
+  if (!action.customFields.playlistId) {
+    throw new Error('customFields.playlistId was not present in action');    
+  }
+
+  if (!action.customFields.isEnabled) {
+    throw new Error('customFields.isEnabled was not present in action');
+  }
 };
 
 /**
@@ -36,43 +29,22 @@ const checkAction = async (action) => {
  * @returns {object} The request response body.
  */
 const screenlyRequest = async (playlistId, is_enabled) => requestAsync({
-  url: `${SCREENLY_API}/api/v3/playlists/${playlistId}`,
+  url: `${SCREENLY_API}/api/v3/playlists/${playlistId}/`,
   headers: { authorization: `Token ${SCREENLY_TOKEN}` },
   method: 'patch',
   form: { is_enabled },
 });
 
-/**
- * Set up a Reactor schedule to reset the playlist.
- *
- * @param {string} productId - The product to use in the map lookup.
- */
-const scheduleReset = async (productId) => {
-  const payload = {
-    event: {
-      playlists: SKU_PLAYLIST_MAP[productId],
-    },
-    executeAt: Date.now() + PLAYLIST_TTL,
-  };
-
-  const schedule = await app.reactor.schedule().create(payload);
-  logger.info(`Reactor scheduled reset for playlist at: ${schedule.executeAt}`);
-};
-
-// @filter(onActionCreated) action.type=implicitScans,scans
-const onActionCreated = async (event) => {
-  const { action } = event;
-  const { product } = action;
+// @filter(onActionCreated) action.type=_updateScreenly
+const onActionCreated = async ({ action }) => {
+  logger.info(`Received action ${action.id}`);
 
   try {
     checkAction(action);
 
-    await Promise.all(SKU_PLAYLIST_MAP[product].map((item, i) => {
-      await screenlyRequest(item, true);
-      logger.info(`Updated screen with ${item}`);
-    }));
-
-    await scheduleReset(product);
+    const { playlistId, isEnabled } = action.customFields;
+    const res = await screenlyRequest(playlistId, isEnabled);
+    logger.debug(JSON.stringify(res));
   } catch (err) {
     logger.error(err.message || err.errors[0]);
   }
@@ -80,25 +52,4 @@ const onActionCreated = async (event) => {
   done();
 };
 
-/**
- * Disable the playlists once the Reactor schedule goes off.
- * 
- * TODO: Is this always the usage pattern? Separate events for enable/disable? Parameterized?
- *
- * @param {object} event - The schedule event object.
- */
-const onScheduledEvent = async (event) => {
-  logger.info('Scheduled playlist reset...');
-  const { playlists } = event;
-
-  try {
-    await Promise.all(playlists.map((item) => {
-      await screenlyRequest(item, false);
-      logger.info(`Disabled playlist ${item}`);
-    }));
-  } catch (err) {
-    logger.error(err.message || err.errors[0]);
-  }
-
-  done();
-};
+module.exports = { onActionCreated };
