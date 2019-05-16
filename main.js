@@ -9,7 +9,7 @@ const PLAYLIST_TTL_M = 5;
 const DEFAULT_PLAYLIST_ID = '';
 /** Map playlist IDs to an EVRYTHNG product that will be scanned */
 const PRODUCT_PLAYLIST_MAP = {
-  exampleProductId: ['examplePlaylistId'],
+  exampleProductId: 'examplePlaylistId',
 };
 
 /**
