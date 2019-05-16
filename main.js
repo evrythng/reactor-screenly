@@ -1,25 +1,15 @@
 const requestAsync = require('request-promise-native');
 
 const SCREENLY_API = 'https://api.screenlyapp.com';
+/** Screenly API token */
 const SCREENLY_TOKEN = '';
-
-/**
- * Check the action has all the required information.
- *
- * @param {object} action - The event action.
- */
-const checkAction = async (action) => {
-  if (!action.customFields) {
-    throw new Error('customFields was not present in action');    
-  }
-
-  if (!action.customFields.playlistId) {
-    throw new Error('customFields.playlistId was not present in action');    
-  }
-
-  if (!action.customFields.isEnabled) {
-    throw new Error('customFields.isEnabled was not present in action');
-  }
+/** Time in minutes a playlist should be active before being removed */
+const PLAYLIST_TTL_M = 5;
+/** PLaylist to use if the product is not present in PRODUCT_PLAYLIST_MAP */
+const DEFAULT_PLAYLIST_ID = '';
+/** Map playlist IDs to an EVRYTHNG product that will be scanned */
+const PRODUCT_PLAYLIST_MAP = {
+  exampleProductId: ['examplePlaylistId'],
 };
 
 /**
@@ -35,16 +25,51 @@ const screenlyRequest = async (playlistId, is_enabled) => requestAsync({
   form: { is_enabled },
 });
 
-// @filter(onActionCreated) action.type=_updateScreenly
+/**
+ * Schedule disabling this playlist after some time has elapsed.
+ *
+ * @param {string} playlistId - ID of the playlist to disable.
+ * @returns {Promise} Promise that resolves after the Reactor schedule is created.
+ */
+const scheduleDisable = async (playlistId) => {
+  const schedule = {
+    executeAt: Date.now() + (PLAYLIST_TTL_M * 60000),
+    event: { playlistId },
+  };
+
+  logger.info(`Scheduling disable of ${playlistId} for ${schedule.executeAt}`);
+  return app.reactor.schedule().create(schedule);
+};
+
+/**
+ * When a Reactor schedule elapses.
+ *
+ * @param {object} event - The event object prescribed in scheduleDisable().
+ */
+const onScheduledEvent = async ({ playlistId }) => {
+  logger.info(`Disabling playlist ${playlistId}`);
+  
+  const res = await screenlyRequest(playlistId, false);
+  logger.debug(`Screenly response: ${JSON.stringify(res)}`);
+};
+
+// @filter(onActionCreated) action.type=implicitScans
 const onActionCreated = async ({ action }) => {
-  logger.info(`Received action ${action.id}`);
+  const { id, product } = action;
+  logger.info(`Received action ${id}`);
 
   try {
-    checkAction(action);
+    let playlistId = PRODUCT_PLAYLIST_MAP[product];
+    if (!playlistId) {
+      logger.info(`No playlist for product ${product}, using default playlist ${DEFAULT_PLAYLIST_ID}`);
+      playlistId = DEFAULT_PLAYLIST_ID;
+    }
 
-    const { playlistId, isEnabled } = action.customFields;
-    const res = await screenlyRequest(playlistId, isEnabled);
-    logger.debug(JSON.stringify(res));
+    logger.info(`Enabling playlist ${playlistId} for product ${product}`);
+    const res = await screenlyRequest(playlistId, true);
+    logger.debug(`Screenly response: ${JSON.stringify(res)}`);
+
+    await scheduleDisable(playlistId);
   } catch (err) {
     logger.error(err.message || err.errors[0]);
   }
