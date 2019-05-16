@@ -5,7 +5,7 @@ const SCREENLY_API = 'https://api.screenlyapp.com';
 const SCREENLY_TOKEN = '';
 /** Time in minutes a playlist should be active before being removed */
 const PLAYLIST_TTL_M = 5;
-/** PLaylist to use if the product is not present in PRODUCT_PLAYLIST_MAP */
+/** Playlist to use if the product is not present in PRODUCT_PLAYLIST_MAP */
 const DEFAULT_PLAYLIST_ID = '';
 /** Map playlist IDs to an EVRYTHNG product that will be scanned */
 const PRODUCT_PLAYLIST_MAP = {
