@@ -23,7 +23,11 @@ const screenlyRequest = async (playlistId, is_enabled) => requestAsync({
   headers: { authorization: `Token ${SCREENLY_TOKEN}` },
   method: 'patch',
   form: { is_enabled },
-}).then(res => JSON.parse(res));
+}).then(res => JSON.parse(res))
+  .then(json => {
+    logger.debug(`Screenly response: ${JSON.stringify(json)}`);
+    return json;
+  });
 
 /**
  * Schedule disabling this playlist after some time has elapsed.
@@ -56,8 +60,8 @@ const handleAsync = f => f().then(done).catch(e => logger.error(e.message || e.e
 const onScheduledEvent = ({ playlistId }) => handleAsync(async () => {
   logger.info(`Disabling playlist ${playlistId}`);
 
-  const res = await screenlyRequest(playlistId, false);
-  logger.debug(`Screenly response: ${JSON.stringify(res)}`);
+  await screenlyRequest(playlistId, false);
+  await screenlyRequest(DEFAULT_PLAYLIST_ID, true);
 });
 
 // @filter(onActionCreated) action.type=implicitScans
@@ -72,8 +76,8 @@ const onActionCreated = ({ action }) => handleAsync(async () => {
   }
 
   logger.info(`Enabling playlist ${playlistId} for product ${product}`);
-  const res = await screenlyRequest(playlistId, true);
-  logger.debug(`Screenly response: ${JSON.stringify(res)}`);
+  await screenlyRequest(DEFAULT_PLAYLIST_ID, false);
+  await screenlyRequest(playlistId, true);
 
   await scheduleDisable(playlistId);
 });
