@@ -23,7 +23,7 @@ const screenlyRequest = async (playlistId, is_enabled) => requestAsync({
   headers: { authorization: `Token ${SCREENLY_TOKEN}` },
   method: 'patch',
   form: { is_enabled },
-});
+}).then(res => JSON.parse(res));
 
 /**
  * Schedule disabling this playlist after some time has elapsed.
@@ -37,44 +37,45 @@ const scheduleDisable = async (playlistId) => {
     event: { playlistId },
   };
 
-  logger.info(`Scheduling disable of ${playlistId} for ${schedule.executeAt}`);
+  logger.info(`Scheduling disable of ${playlistId} for ${new Date(schedule.executeAt).toISOString()}`);
   return app.reactor.schedule().create(schedule);
 };
+
+/**
+ * Run an async function and take care of calling done() and catching any errors.
+ *
+ * @param {function} f - The function to run.
+ */
+const handleAsync = f => f().then(done).catch(e => logger.error(e.message || e.errors[0]));
 
 /**
  * When a Reactor schedule elapses.
  *
  * @param {object} event - The event object prescribed in scheduleDisable().
  */
-const onScheduledEvent = async ({ playlistId }) => {
+const onScheduledEvent = ({ playlistId }) => handleAsync(async () => {
   logger.info(`Disabling playlist ${playlistId}`);
-  
+
   const res = await screenlyRequest(playlistId, false);
   logger.debug(`Screenly response: ${JSON.stringify(res)}`);
-};
+});
 
 // @filter(onActionCreated) action.type=implicitScans
-const onActionCreated = async ({ action }) => {
+const onActionCreated = ({ action }) => handleAsync(async () => {
   const { id, product } = action;
   logger.info(`Received action ${id}`);
 
-  try {
-    let playlistId = PRODUCT_PLAYLIST_MAP[product];
-    if (!playlistId) {
-      logger.info(`No playlist for product ${product}, using default playlist ${DEFAULT_PLAYLIST_ID}`);
-      playlistId = DEFAULT_PLAYLIST_ID;
-    }
-
-    logger.info(`Enabling playlist ${playlistId} for product ${product}`);
-    const res = await screenlyRequest(playlistId, true);
-    logger.debug(`Screenly response: ${JSON.stringify(res)}`);
-
-    await scheduleDisable(playlistId);
-  } catch (err) {
-    logger.error(err.message || err.errors[0]);
+  let playlistId = PRODUCT_PLAYLIST_MAP[product];
+  if (!playlistId) {
+    logger.info(`No playlist for product ${product}, using default playlist ${DEFAULT_PLAYLIST_ID}`);
+    playlistId = DEFAULT_PLAYLIST_ID;
   }
 
-  done();
-};
+  logger.info(`Enabling playlist ${playlistId} for product ${product}`);
+  const res = await screenlyRequest(playlistId, true);
+  logger.debug(`Screenly response: ${JSON.stringify(res)}`);
+
+  await scheduleDisable(playlistId);
+});
 
 module.exports = { onActionCreated };
