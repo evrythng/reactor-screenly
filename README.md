@@ -11,19 +11,15 @@ following steps to prepare the screens, playlists, and assets for the products
 that will be displayed using this integration script:
 
 
-### Setup screen
+### Setup screen, playlist, and assets
 
 1. Add the screen to be used to the account - the dashboard will guide you
    through this process.
-2. Add the screent to a group - playlists are displayed on a group basis.
-
-
-### Setup playlists and assets
-
-1. Create a playlist for each EVRYTHNG product to be displayed.
-2. Add the product's assets (images, web pages, etc.) for each product to its
+2. Add the screen to a group - playlists are displayed on a group basis.
+3. Create a playlist for each EVRYTHNG product to be displayed.
+4. Add the product's assets (images, web pages, etc.) for each product to its
    corresponding playlist.
-3. Create a default playlist, and add a generic asset(s) to be shown when no
+5. Create a default playlist, and add a generic asset(s) to be shown when no
    products have been scanned recently, such as brand logos/information.
 
 
