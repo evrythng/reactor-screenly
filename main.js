@@ -77,5 +77,3 @@ const onActionCreated = ({ action }) => handleAsync(async () => {
 
   await scheduleDisable(playlistId);
 });
-
-module.exports = { onActionCreated };
