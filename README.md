@@ -61,7 +61,7 @@ at the top of this script:
 > 'https://mwc.screenlyapp.com/manage/playlists/5cdd7c24ba3f8a00157c563c'.
 
 * `SCREENLY_TOKEN` - Screenly API token, obtained as described above.
-* `PLAYLIST_TTL_M` - Time in minutes a playlist should be active before being
+* `PLAYLIST_TTL_S` - Time in seconds a playlist should be active before being
   removed.
 * `DEFAULT_PLAYLIST_ID` - Playlist to use if the product is not present in
   `PRODUCT_PLAYLIST_MAP`.
@@ -90,7 +90,7 @@ target (which dictates which playlist will be shown):
 }
 ```
 
-After `PLAYLIST_TTL_M`, the script will be invoked again automatically to
+After `PLAYLIST_TTL_S`, the script will be invoked again automatically to
 disable the chosen playlist, leaving only the `DEFAULT_PLAYLIST_ID` displayed.
 
 In the real world, a consumer using their phone to anonymously scan a product's
