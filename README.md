@@ -51,7 +51,7 @@ HTTP/2 200
 }
 ```
 
-### Reactor Script Configuration
+## Reactor Script Configuration
 
 With the account and authentication configured, set the required constant fields
 at the top of this script:
