@@ -50,14 +50,14 @@ const scheduleDisable = async (playlistId) => {
  *
  * @param {function} f - The function to run.
  */
-const handleAsync = f => f().then(done).catch(e => logger.error(e.message || e.errors[0]));
+const runAsync = f => f().then(done).catch(e => logger.error(e.message || e.errors[0]));
 
 /**
  * When a Reactor schedule elapses.
  *
  * @param {object} event - The event object prescribed in scheduleDisable().
  */
-const onScheduledEvent = ({ playlistId }) => handleAsync(async () => {
+const onScheduledEvent = ({ playlistId }) => runAsync(async () => {
   logger.info(`Disabling playlist ${playlistId}`);
 
   await screenlyRequest(playlistId, false);
@@ -65,7 +65,7 @@ const onScheduledEvent = ({ playlistId }) => handleAsync(async () => {
 });
 
 // @filter(onActionCreated) action.type=implicitScans
-const onActionCreated = ({ action }) => handleAsync(async () => {
+const onActionCreated = ({ action }) => runAsync(async () => {
   const { id, product } = action;
   logger.info(`Received action ${id}`);
 
