@@ -3,8 +3,8 @@ const requestAsync = require('request-promise-native');
 const SCREENLY_API = 'https://api.screenlyapp.com';
 /** Screenly API token */
 const SCREENLY_TOKEN = '';
-/** Time in minutes a playlist should be active before being removed */
-const PLAYLIST_TTL_M = 5;
+/** Time in seconds a playlist should be active before being removed */
+const PLAYLIST_TTL_S = 5 * 60;
 /** Playlist to use if the product is not present in PRODUCT_PLAYLIST_MAP */
 const DEFAULT_PLAYLIST_ID = '';
 /** Map playlist IDs to an EVRYTHNG product that will be scanned */
@@ -37,7 +37,7 @@ const screenlyRequest = async (playlistId, is_enabled) => requestAsync({
  */
 const scheduleDisable = async (playlistId) => {
   const schedule = {
-    executeAt: Date.now() + (PLAYLIST_TTL_M * 60000),
+    executeAt: Date.now() + (PLAYLIST_TTL_S * 1000),
     event: { playlistId },
   };
 
@@ -81,3 +81,8 @@ const onActionCreated = ({ action }) => handleAsync(async () => {
 
   await scheduleDisable(playlistId);
 });
+
+module.exports = {
+  onActionCreated,
+  onScheduledEvent,
+};
