@@ -4,7 +4,7 @@ const SCREENLY_API = 'https://api.screenlyapp.com';
 /** Screenly API token */
 const SCREENLY_TOKEN = '';
 /** Time in seconds a playlist should be active before being removed */
-const PLAYLIST_TTL_S = 5 * 60;
+const PLAYLIST_TTL_S = 60;
 /** Playlist to use if the product is not present in PRODUCT_PLAYLIST_MAP */
 const DEFAULT_PLAYLIST_ID = '';
 /** Map playlist IDs to an EVRYTHNG product that will be scanned */
@@ -50,7 +50,7 @@ const scheduleDisable = async (playlistId) => {
  *
  * @param {function} f - The function to run.
  */
-const runAsync = f => f().then(done).catch(e => logger.error(e.message || e.errors[0]));
+const runAsync = f => f().catch(e => logger.error(e.message || e.errors[0])).then(done);
 
 /**
  * When a Reactor schedule elapses.
