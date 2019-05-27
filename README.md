@@ -1,8 +1,14 @@
 # reactor-screenly
 
-Packaged Reactor script for communicating with the Screenly API for
+Packaged Reactor script for communicating with the [Screenly API](https://www.screenly.io/) for
 enabling/disabling playlists using EVRYTHNG actions.
 
+## What is it good for?
+
+Screenly is a leading digital signage platform. By connecting it with the EVRYTHNG platform
+you can now display personalized content on screens when people interact with EVRYTHNG tagged products.
+For instance imagine changing the content of in-store screens depending on the products customers pick up. 
+With this connector, this is now possible within minutes!
 
 ## Screenly Setup
 
