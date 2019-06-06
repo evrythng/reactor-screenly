@@ -22,7 +22,7 @@ const screenlyRequest = async (playlistId, is_enabled) => requestAsync({
   url: `${SCREENLY_API}/api/v3/playlists/${playlistId}/`,
   headers: { authorization: `Token ${SCREENLY_TOKEN}` },
   method: 'patch',
-  form: { is_enabled },
+  form: { is_enabled, priority: 1 },
 }).then(res => JSON.parse(res))
   .then(json => {
     logger.debug(`Screenly response: ${JSON.stringify(json)}`);
@@ -61,7 +61,6 @@ const onScheduledEvent = ({ playlistId }) => runAsync(async () => {
   logger.info(`Disabling playlist ${playlistId}`);
 
   await screenlyRequest(playlistId, false);
-  await screenlyRequest(DEFAULT_PLAYLIST_ID, true);
 });
 
 // @filter(onActionCreated) action.type=implicitScans
@@ -76,7 +75,6 @@ const onActionCreated = ({ action }) => runAsync(async () => {
   }
 
   logger.info(`Enabling playlist ${playlistId} for product ${product}`);
-  await screenlyRequest(DEFAULT_PLAYLIST_ID, false);
   await screenlyRequest(playlistId, true);
 
   await scheduleDisable(playlistId);

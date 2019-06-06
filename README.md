@@ -1,14 +1,18 @@
 # reactor-screenly
 
-Packaged Reactor script for communicating with the [Screenly API](https://www.screenly.io/) for
-enabling/disabling playlists using EVRYTHNG actions.
+Packaged Reactor script for communicating with the
+[Screenly API](https://www.screenly.io/) for enabling/disabling playlists using
+EVRYTHNG actions.
+
 
 ## What is it good for?
 
-Screenly is a leading digital signage platform. By connecting it with the EVRYTHNG platform
-you can now display personalized content on screens when people interact with EVRYTHNG tagged products.
-For instance imagine changing the content of in-store screens depending on the products customers pick up. 
-With this connector, this is now possible within minutes!
+Screenly is a leading digital signage platform. By connecting it with the
+EVRYTHNG platform you can now display personalized content on screens when
+people interact with EVRYTHNG tagged products. For instance imagine changing the
+content of in-store screens depending on the products customers pick up.  With
+this connector, this is now possible within minutes!
+
 
 ## Screenly Setup
 
@@ -57,6 +61,7 @@ HTTP/2 200
 }
 ```
 
+
 ## Reactor Script Configuration
 
 With the account and authentication configured, set the required constant fields
@@ -102,3 +107,12 @@ disable the chosen playlist, leaving only the `DEFAULT_PLAYLIST_ID` displayed.
 In the real world, a consumer using their phone to anonymously scan a product's
 QR code results in the creation of an `implicitScans` action, thus triggering
 the integration in the same manner.
+
+
+### Multiple Screens/Products
+
+If there are multiple screens to be used for multiple products (for insance in
+different isles in a store), this can be achieved by ensuring that each
+different Screenly Screen is listed in the 'Plays on' field of the appropriate
+product playlists. In this manner, the request to enable each product's playlist
+will then be displayed on the appropriate screen.
