@@ -71,7 +71,8 @@ at the top of this script:
 > details page as the last URL segment. For example:
 > 'https://mwc.screenlyapp.com/manage/playlists/5cdd7c24ba3f8a00157c563c'.
 
-* `SCREENLY_TOKEN` - Screenly API token, obtained as described above.
+* `SCREENLY_TOKEN` - Screenly API token, obtained as described above. You need to create a .env file with this line inside : 
+`SCREENLY_TOKEN=YOUR_TOKEN` (or just replace `process.env.SCREENLY_TOKEN` with your API token. In that case, you won't need the dotenv package anymore)
 * `PLAYLIST_TTL_S` - Time in seconds a playlist should be active before being
   removed.
 * `DEFAULT_PLAYLIST_ID` - Playlist to use if the product is not present in
