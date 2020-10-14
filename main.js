@@ -1,8 +1,9 @@
+require('dotenv').config();
 const requestAsync = require('request-promise-native');
 
 const SCREENLY_API = 'https://api.screenlyapp.com';
 /** Screenly API token */
-const SCREENLY_TOKEN = '';
+const SCREENLY_TOKEN = process.env.SCREENLY_TOKEN;
 /** Time in seconds a playlist should be active before being removed */
 const PLAYLIST_TTL_S = 60;
 /** Playlist to use if the product is not present in PRODUCT_PLAYLIST_MAP */
