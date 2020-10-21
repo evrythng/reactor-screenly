@@ -34,7 +34,7 @@ that will be displayed using this integration script:
 
 This integration script requires an access token in order to manipulate your
 screenly account remotely in response to product scans. To obtain this token,
-you need to go in your screenly account. Then Settings > Account and at the 
+you need to go into your screenly account. Then Settings > Account and at the 
 bottom of the page you should see a 'Token' section. Then, create a new token and 
 save it somewhere, you'll need it in the reactor script configuration.
 
