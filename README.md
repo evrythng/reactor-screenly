@@ -4,7 +4,6 @@ Packaged Reactor script for communicating with the
 [Screenly API](https://www.screenly.io/) for enabling/disabling playlists using
 EVRYTHNG actions.
 
-
 ## What is it good for?
 
 Screenly is a leading digital signage platform. By connecting it with the
@@ -13,13 +12,11 @@ people interact with EVRYTHNG tagged products. For instance imagine changing the
 content of in-store screens depending on the products customers pick up.  With
 this connector, this is now possible within minutes!
 
-
 ## Screenly Setup
 
 Using the [Screenly dashboard](https://mwc.screenlyapp.com), perform the
 following steps to prepare the screens, playlists, and assets for the products
 that will be displayed using this integration script:
-
 
 ### Setup screen, playlist, and assets
 
@@ -37,30 +34,9 @@ that will be displayed using this integration script:
 
 This integration script requires an access token in order to manipulate your
 screenly account remotely in response to product scans. To obtain this token,
-make the following API request:
-
-```
-curl -i -H Content-Type:application/json \
-  -X POST https://api.screenlyapp.com/api/v3/tokens/ \
-  -d '{
-  "username": "EMAIL_ADDRESS",
-  "password": "PASSWORD"
-}'
-```
-
-Where `EMAIL_ADDRESS` and `PASSWORD` are your Screenly dashboard login
-credentials. The response contains the token to be used here as
-`SCREENLY_TOKEN` (truncated here):
-
-```
-HTTP/2 200
-
-{
-  "username": "EMAIL_ADDRESS",
-  "token": "3d41dbcd..."
-}
-```
-
+you need to go in your screenly account. Then Settings > Account and at the 
+bottom of the page you should see a 'Token' section. Then, create a new token and 
+save it somewhere, you'll need it in the reactor script configuration.
 
 ## Reactor Script Configuration
 
@@ -71,8 +47,10 @@ at the top of this script:
 > details page as the last URL segment. For example:
 > 'https://mwc.screenlyapp.com/manage/playlists/5cdd7c24ba3f8a00157c563c'.
 
-* `SCREENLY_TOKEN` - Screenly API token, obtained as described above. You need to create a .env file with this line inside : 
-`SCREENLY_TOKEN=YOUR_TOKEN` (or just replace `process.env.SCREENLY_TOKEN` with your API token. In that case, you won't need the dotenv package anymore)
+* `SCREENLY_TOKEN` - Screenly API token, obtained as described above. You need to 
+create a .env file with this line inside : 
+`SCREENLY_TOKEN=YOUR_TOKEN` (or just replace `process.env.SCREENLY_TOKEN` with your API token. 
+In that case, you won't need the dotenv package anymore).
 * `PLAYLIST_TTL_S` - Time in seconds a playlist should be active before being
   removed.
 * `DEFAULT_PLAYLIST_ID` - Playlist to use if the product is not present in
@@ -108,7 +86,6 @@ disable the chosen playlist, leaving only the `DEFAULT_PLAYLIST_ID` displayed.
 In the real world, a consumer using their phone to anonymously scan a product's
 QR code results in the creation of an `implicitScans` action, thus triggering
 the integration in the same manner.
-
 
 ### Multiple Screens/Products
 
