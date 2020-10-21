@@ -67,6 +67,12 @@ const PRODUCT_PLAYLIST_MAP = {
 };
 ```
 
+## Deploy the reactor script
+
+To deploy the reactor script, you can do it manually or use the EVRYTHNG API. I suggest you to use 
+the deploy_reactor command that is defined in the `package.json`. 
+You just need to modify this part of the command with your TRUSTED_API_KEY and APPLICATION_API_KEY : 
+`PUT 'https://api.evrythng.com/projects/TRUSTED_API_KEY/applications/APPLICATION_API_KEY/reactor/script'`
 
 ## Usage
 
