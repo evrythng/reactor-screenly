@@ -1,6 +1,4 @@
 node_modules
 *.DS_Store
 reactor-config.json
-.env
-*.secret
 bundle.zip
