@@ -8,15 +8,22 @@ const SCREENLY_TOKEN = process.env.SCREENLY_TOKEN;
 const PLAYLIST_TTL_S = 60;
 /** Playlist to use if the product is not present in PRODUCT_PLAYLIST_MAP */
 const DEFAULT_PLAYLIST_ID = '';
-/** Map playlist IDs to an EVRYTHNG product that will be scanned */
-const PRODUCT_PLAYLIST_MAP = {
-  exampleProductId: 'examplePlaylistId',
-};
+
+const getPlaylistCorrespondingToProduct = async (productId) => {
+  const product = await app.product(productId).read();
+  const playlistId = product.customFields.playlistId;
+  if (!playlistId) {
+    logger.info(`No playlist for product ${product}, using default playlist ${DEFAULT_PLAYLIST_ID}`);
+    return DEFAULT_PLAYLIST_ID;
+  }
+  return playlistId;
+}
 
 /**
  * Send a Screenly patch request for a specific playlist by ID.
  *
  * @param {string} playlistId - ID of the playlist to display.
+ * @param {boolean} is_enabled - if the playlist has to be enable or not
  * @returns {object} The request response body.
  */
 const screenlyRequest = async (playlistId, is_enabled) => requestAsync({
@@ -66,14 +73,9 @@ const onScheduledEvent = ({ playlistId }) => runAsync(async () => {
 
 // @filter(onActionCreated) action.type=implicitScans
 const onActionCreated = ({ action }) => runAsync(async () => {
-  const { id, product } = action;
-  logger.info(`Received action ${id}`);
+  const { product } = action;
 
-  let playlistId = PRODUCT_PLAYLIST_MAP[product];
-  if (!playlistId) {
-    logger.info(`No playlist for product ${product}, using default playlist ${DEFAULT_PLAYLIST_ID}`);
-    playlistId = DEFAULT_PLAYLIST_ID;
-  }
+  let playlistId = await getPlaylistCorrespondingToProduct(product);
 
   logger.info(`Enabling playlist ${playlistId} for product ${product}`);
   await screenlyRequest(playlistId, true);

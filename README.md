@@ -33,8 +33,8 @@ that will be displayed using this integration script:
 ### Setup authentication
 
 This integration script requires an access token in order to manipulate your
-screenly account remotely in response to product scans. To obtain this token,
-you need to go into your screenly account. Then Settings > Account and at the 
+Screenly account remotely in response to product scans. To obtain this token,
+you need to go into your Screenly account. Then Settings > Account and at the 
 bottom of the page you should see a 'Token' section. Then, create a new token and 
 save it somewhere, you'll need it in the reactor script configuration.
 
@@ -51,28 +51,27 @@ at the top of this script:
 create a .env file with this line inside : 
 `SCREENLY_TOKEN=YOUR_TOKEN` (or just replace `process.env.SCREENLY_TOKEN` with your API token. 
 In that case, you won't need the dotenv package anymore).
-* `PLAYLIST_TTL_S` - Time in seconds a playlist should be active before being
-  removed.
-* `DEFAULT_PLAYLIST_ID` - Playlist to use if the product is not present in
-  `PRODUCT_PLAYLIST_MAP`.
-* `PRODUCT_PLAYLIST_MAP` - Map playlist IDs to an EVRYTHNG product that will be
-  scanned. Example shown below:
-
-```js
-const PRODUCT_PLAYLIST_MAP = {
-  // First product's ID mapped to its playlist ID
-  Uq7rhrSyF5D8GRawa3Hsnwbp: '5cdd7c24ba3f8a00157c563c',
-
-  // Others...
-};
-```
+* `PLAYLIST_TTL_S` - Time in seconds a playlist should be active before being removed.
+* `DEFAULT_PLAYLIST_ID` - Playlist to use if the `playlistId` is not present in the custom fields of the product.
 
 ## Deploy the reactor script
 
-To deploy the reactor script, you can do it manually or use the EVRYTHNG API. I suggest you to use 
-the deploy_reactor command that is defined in the `package.json`. 
-You just need to modify this part of the command with your TRUSTED_API_KEY and APPLICATION_API_KEY : 
-`PUT 'https://api.evrythng.com/projects/TRUSTED_API_KEY/applications/APPLICATION_API_KEY/reactor/script'`
+First, you need to start by cloning this project.
+
+Then, you need to configure a few variables as it is explained in the previous section.
+
+Once you have configured the reactor script, you have to deploy it to your application. To deploy it, you can do it 
+manually or use the EVRYTHNG API. I suggest you to use the deploy_reactor command that is defined in the `package.json`. 
+You just need to modify this part of the command with your PROJECT_ID and APPLICATION_ID : 
+`PUT 'https://api.evrythng.com/projects/PROJECT_ID/applications/APPLICATION_ID/reactor/script'`
+
+And you need to create an `access_key.secret` file which contains a single line : the TRUSTED_API_KEY of your 
+application.
+
+Finally, you run this command to deploy the script: 
+```
+npm run deploy_reactor
+```
 
 ## Usage
 
