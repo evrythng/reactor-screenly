@@ -48,9 +48,7 @@ at the top of this script:
 > 'https://mwc.screenlyapp.com/manage/playlists/5cdd7c24ba3f8a00157c563c'.
 
 * `SCREENLY_TOKEN` - Screenly API token, obtained as described above. You need to 
-create a .env file with this line inside : 
-`SCREENLY_TOKEN=YOUR_TOKEN` (or just replace `process.env.SCREENLY_TOKEN` with your API token. 
-In that case, you won't need the dotenv package anymore).
+update the .env file with this line inside : `SCREENLY_TOKEN="YOUR_TOKEN"`. 
 * `PLAYLIST_TTL_S` - Time in seconds a playlist should be active before being removed.
 * `DEFAULT_PLAYLIST_ID` - Playlist to use if the `playlistId` is not present in the custom fields of the product.
 
@@ -65,8 +63,7 @@ manually or use the EVRYTHNG API. I suggest you to use the deploy_reactor comman
 You just need to modify this part of the command with your PROJECT_ID and APPLICATION_ID : 
 `PUT 'https://api.evrythng.com/projects/PROJECT_ID/applications/APPLICATION_ID/reactor/script'`
 
-And you need to create an `access_key.secret` file which contains a single line : the TRUSTED_API_KEY of your 
-application.
+And you need to update `access_key.secret` with your TRUSTED_API_KEY.
 
 Finally, you run this command to deploy the script: 
 ```
