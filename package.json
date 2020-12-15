@@ -5,7 +5,7 @@
   "main": "main.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy_reactor": "zip bundle.zip main.js package.json .env; curl -i -H \"Content-Type: multipart/form-data\" -H \"Authorization: `cat access_key.secret`\"  -X PUT 'https://api.evrythng.com/projects/UQFDPUAsKTp9q5awTG5aaDhs/applications/UQ2ERhbcmCmr6fRVckDx2fVh/reactor/script' -F file=@./bundle.zip"
+    "deploy_reactor": "zip bundle.zip main.js package.json .env; curl -i -H \"Content-Type: multipart/form-data\" -H \"Authorization: `cat access_key.secret | head -n1`\"  -X PUT 'https://api.evrythng.com/projects/UQFDPUAsKTp9q5awTG5aaDhs/applications/UQ2ERhbcmCmr6fRVckDx2fVh/reactor/script' -F file=@./bundle.zip"
   },
   "keywords": [],
   "author": "EVRYTHNG",

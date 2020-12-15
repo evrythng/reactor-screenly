@@ -63,7 +63,8 @@ manually or use the EVRYTHNG API. I suggest you to use the deploy_reactor comman
 You just need to modify this part of the command with your PROJECT_ID and APPLICATION_ID : 
 `PUT 'https://api.evrythng.com/projects/PROJECT_ID/applications/APPLICATION_ID/reactor/script'`
 
-And you need to update `access_key.secret` with your TRUSTED_API_KEY.
+And you need to update `access_key.secret` with your OPERATOR_API_KEY. To get it, you have to click on your account 
+(top right corner of the EVRYTHNG dashboard) and go to 'Account settings'.
 
 Finally, you run this command to deploy the script: 
 ```
