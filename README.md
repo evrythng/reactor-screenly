@@ -24,7 +24,7 @@ that will be displayed using this integration script:
    through this process.
 2. Add the screen to a group - playlists are displayed on a group basis.
 3. Create a playlist for each EVRYTHNG product to be displayed.
-4. Add the product's assets (images, web pages, etc.) for each product to its
+4. Add the product's content (images, web pages, etc.) for each product to its
    corresponding playlist.
 5. Create a default playlist, and add a generic asset(s) to be shown when no
    products have been scanned recently, such as brand logos/information.
