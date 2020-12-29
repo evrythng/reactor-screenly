@@ -2,14 +2,14 @@
 
 Packaged Reactor script for communicating with the
 [Screenly API](https://www.screenly.io/) for enabling/disabling playlists using
-EVRYTHNG actions.
+EVRYTHNG Actions.
 
 ## What is it good for?
 
 Screenly is a leading digital signage platform. By connecting it with the
-EVRYTHNG platform you can now display personalized content on screens when
+EVRYTHNG Product Cloud you can now display personalized content on screens when
 people interact with EVRYTHNG tagged products. For instance imagine changing the
-content of in-store screens depending on the products customers pick up.  With
+content of in-store screens depending on the products customers pick up. With
 this connector, this is now possible within minutes!
 
 ## Screenly Setup
@@ -34,8 +34,8 @@ that will be displayed using this integration script:
 
 This integration script requires an access token in order to manipulate your
 Screenly account remotely in response to product scans. To obtain this token,
-you need to go into your Screenly account. Then Settings > Account and at the 
-bottom of the page you should see a 'Token' section. Then, create a new token and 
+you need to go into your Screenly account. Then `Settings` > `Account` and at the 
+bottom of the page you should see a `Token` section. Create a new token and 
 save it somewhere, you'll need it in the reactor script configuration.
 
 ## Reactor Script Configuration
@@ -54,9 +54,8 @@ update the .env file with this line inside : `SCREENLY_TOKEN="YOUR_TOKEN"`.
 
 ## Deploy the reactor script
 
-First, you need to start by cloning this project.
-
-Then, you need to configure a few variables as it is explained in the previous section.
+Start by cloning this project.
+Then, you'll need to configure a few variables as explained in the previous section.
 
 Once you have configured the reactor script, you have to deploy it to your application. To deploy it, you can do it 
 manually or use the EVRYTHNG API. I suggest you to use the deploy_reactor command that is defined in the `package.json`. 
